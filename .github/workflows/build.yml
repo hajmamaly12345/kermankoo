@@ -17,17 +17,17 @@ jobs:
           distribution: temurin
           java-version: 17
 
+      - name: Setup Gradle 8.7
+        run: |
+          cd /tmp
+          curl -sL -o gradle.zip https://services.gradle.org/distributions/gradle-8.7-bin.zip
+          unzip -q gradle.zip
+          echo "/tmp/gradle-8.7/bin" >> $GITHUB_PATH
+
       - name: Build debug APK
         run: |
           cd driver-app
-          if [ -f gradlew ]; then
-            chmod +x gradlew
-            ./gradlew assembleDebug --no-daemon
-          else
-            gradle wrapper --gradle-version 8.7
-            chmod +x gradlew
-            ./gradlew assembleDebug --no-daemon
-          fi
+          gradle assembleDebug --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
